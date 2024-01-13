@@ -32,6 +32,7 @@ package org.firstinspires.ftc.robotcontroller.external.samples;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -120,13 +121,13 @@ public class ConceptTensorFlowObjectDetectionSwitchableCameras extends LinearOpM
         webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
         webcam2 = hardwareMap.get(WebcamName.class, "Webcam 2");
         CameraName switchableCamera = ClassFactory.getInstance()
-            .getCameraManager().nameForSwitchableCamera(webcam1, webcam2);
+                .getCameraManager().nameForSwitchableCamera(webcam1, webcam2);
 
         // Create the vision portal by using a builder.
         visionPortal = new VisionPortal.Builder()
-            .setCamera(switchableCamera)
-            .addProcessor(tfod)
-            .build();
+                .setCamera(switchableCamera)
+                .addProcessor(tfod)
+                .build();
 
     }   // end method initTfod()
 
@@ -153,10 +154,10 @@ public class ConceptTensorFlowObjectDetectionSwitchableCameras extends LinearOpM
 
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
-            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
-            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+            double x = (recognition.getLeft() + recognition.getRight()) / 2;
+            double y = (recognition.getTop() + recognition.getBottom()) / 2;
 
-            telemetry.addData(""," ");
+            telemetry.addData("", " ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());

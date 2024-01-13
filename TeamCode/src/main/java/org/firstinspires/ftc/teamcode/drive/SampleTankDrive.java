@@ -54,24 +54,22 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
  */
 @Config
 public class SampleTankDrive extends TankDrive {
+    private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
+    private static final TrajectoryAccelerationConstraint accelConstraint = getAccelerationConstraint(MAX_ACCEL);
     public static PIDCoefficients AXIAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
-
     public static double VX_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
+    private final TrajectorySequenceRunner trajectorySequenceRunner;
+    private final TrajectoryFollower follower;
 
-    private TrajectorySequenceRunner trajectorySequenceRunner;
+    private final List<DcMotorEx> motors;
+    private final List<DcMotorEx> leftMotors;
+    private final List<DcMotorEx> rightMotors;
+    private final IMU imu;
 
-    private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
-    private static final TrajectoryAccelerationConstraint accelConstraint = getAccelerationConstraint(MAX_ACCEL);
-
-    private TrajectoryFollower follower;
-
-    private List<DcMotorEx> motors, leftMotors, rightMotors;
-    private IMU imu;
-
-    private VoltageSensor batteryVoltageSensor;
+    private final VoltageSensor batteryVoltageSensor;
 
     public SampleTankDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH);
@@ -128,6 +126,17 @@ public class SampleTankDrive extends TankDrive {
                 follower, HEADING_PID, batteryVoltageSensor,
                 new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()
         );
+    }
+
+    public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
+        return new MinVelocityConstraint(Arrays.asList(
+                new AngularVelocityConstraint(maxAngularVel),
+                new TankVelocityConstraint(maxVel, trackWidth)
+        ));
+    }
+
+    public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
+        return new ProfileAccelerationConstraint(maxAccel);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -188,7 +197,6 @@ public class SampleTankDrive extends TankDrive {
     public Pose2d getLastError() {
         return trajectorySequenceRunner.getLastPoseError();
     }
-
 
     public void update() {
         updatePoseEstimate();
@@ -290,16 +298,5 @@ public class SampleTankDrive extends TankDrive {
     @Override
     public Double getExternalHeadingVelocity() {
         return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
-    }
-
-    public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
-        return new MinVelocityConstraint(Arrays.asList(
-                new AngularVelocityConstraint(maxAngularVel),
-                new TankVelocityConstraint(maxVel, trackWidth)
-        ));
-    }
-
-    public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
-        return new ProfileAccelerationConstraint(maxAccel);
     }
 }
