@@ -48,9 +48,15 @@ import java.util.Objects;
 public class ManualFeedforwardTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
 
-    private final FtcDashboard dashboard = FtcDashboard.getInstance();
+    private FtcDashboard dashboard = FtcDashboard.getInstance();
 
     private SampleMecanumDrive drive;
+
+    enum Mode {
+        DRIVER_MODE,
+        TUNING_MODE
+    }
+
     private Mode mode;
 
     private static MotionProfile generateProfile(boolean movingForward) {
@@ -144,10 +150,5 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
             telemetry.update();
         }
-    }
-
-    enum Mode {
-        DRIVER_MODE,
-        TUNING_MODE
     }
 }

@@ -34,7 +34,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -72,7 +71,8 @@ import static com.qualcomm.hardware.rev.RevHubOrientationOnRobot.xyzOrientation;
  */
 @TeleOp(name = "Sensor: IMU Non-Orthogonal", group = "Sensor")
 @Disabled     // Comment this out to add to the OpMode list
-public class SensorIMUNonOrthogonal extends LinearOpMode {
+public class SensorIMUNonOrthogonal extends LinearOpMode
+{
     // The IMU sensor object
     IMU imu;
 
@@ -80,8 +80,7 @@ public class SensorIMUNonOrthogonal extends LinearOpMode {
     // Main logic
     //----------------------------------------------------------------------------------------------
 
-    @Override
-    public void runOpMode() throws InterruptedException {
+    @Override public void runOpMode() throws InterruptedException {
 
         // Retrieve and initialize the IMU.
         // This sample expects the IMU to be in a REV Hub and named "imu".

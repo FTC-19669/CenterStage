@@ -34,7 +34,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -49,42 +48,39 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 @TeleOp(name = "Concept: Telemetry", group = "Concept")
 @Disabled
-public class ConceptTelemetry extends LinearOpMode {
-    static final String[] poem = new String[]{
-
-            "Mary had a little lamb,",
-            "His fleece was white as snow,",
-            "And everywhere that Mary went,",
-            "The lamb was sure to go.",
-            "",
-            "He followed her to school one day,",
-            "Which was against the rule,",
-            "It made the children laugh and play",
-            "To see a lamb at school.",
-            "",
-            "And so the teacher turned it out,",
-            "But still it lingered near,",
-            "And waited patiently about,",
-            "Till Mary did appear.",
-            "",
-            "\"Why does the lamb love Mary so?\"",
-            "The eager children cry.",
-            "\"Why, Mary loves the lamb, you know,\"",
-            "The teacher did reply.",
-            "",
-            ""
-    };
-    /**
-     * Keeps track of the line of the poem which is to be emitted next
-     */
+public class ConceptTelemetry extends LinearOpMode  {
+    /** Keeps track of the line of the poem which is to be emitted next */
     int poemLine = 0;
-    /**
-     * Keeps track of how long it's been since we last emitted a line of poetry
-     */
+
+    /** Keeps track of how long it's been since we last emitted a line of poetry */
     ElapsedTime poemElapsed = new ElapsedTime();
 
-    @Override
-    public void runOpMode() {
+    static final String[] poem = new String[] {
+
+        "Mary had a little lamb,",
+        "His fleece was white as snow,",
+        "And everywhere that Mary went,",
+        "The lamb was sure to go.",
+        "",
+        "He followed her to school one day,",
+        "Which was against the rule,",
+        "It made the children laugh and play",
+        "To see a lamb at school.",
+        "",
+        "And so the teacher turned it out,",
+        "But still it lingered near,",
+        "And waited patiently about,",
+        "Till Mary did appear.",
+        "",
+        "\"Why does the lamb love Mary so?\"",
+        "The eager children cry.",
+        "\"Why, Mary loves the lamb, you know,\"",
+        "The teacher did reply.",
+        "",
+        ""
+    };
+
+    @Override public void runOpMode() {
 
         /* we keep track of how long it's been since the OpMode was started, just
          * to have some interesting data to show */
@@ -120,11 +116,10 @@ public class ConceptTelemetry extends LinearOpMode {
          * @see Telemetry#getMsTransmissionInterval()
          */
         telemetry.addData("voltage", "%.1f volts", new Func<Double>() {
-            @Override
-            public Double value() {
+            @Override public Double value() {
                 return getBatteryVoltage();
             }
-        });
+            });
 
         // Reset to keep some timing stats for the post-'start' part of the OpMode
         opmodeRunTime.reset();
@@ -164,7 +159,7 @@ public class ConceptTelemetry extends LinearOpMode {
     // emits a line of poetry to the telemetry log
     void emitPoemLine() {
         telemetry.log().add(poem[poemLine]);
-        poemLine = (poemLine + 1) % poem.length;
+        poemLine = (poemLine+1) % poem.length;
         poemElapsed.reset();
     }
 

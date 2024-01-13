@@ -1,3 +1,3 @@
-# FTC - Centerstage
+Roadrunner 0.5.6 quickstart (https://github.com/acmerobotics/road-runner-quickstart/tree/quickstart1) with a FTC 9.0.1 SDK
 
-This is the codebase for FTC team 19669 based in Sammamish, Washington. Code is for the 2023 - 2024 FTC Centerstage season.
+This code isn't mine, I'm just redistributing RoadRunner 0.5.6 with an updated FTC SDK

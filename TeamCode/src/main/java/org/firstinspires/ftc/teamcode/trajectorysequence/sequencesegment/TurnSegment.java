@@ -26,11 +26,11 @@ public final class TurnSegment extends SequenceSegment {
         this.motionProfile = motionProfile;
     }
 
-    public double getTotalRotation() {
+    public final double getTotalRotation() {
         return this.totalRotation;
     }
 
-    public MotionProfile getMotionProfile() {
+    public final MotionProfile getMotionProfile() {
         return this.motionProfile;
     }
 }
