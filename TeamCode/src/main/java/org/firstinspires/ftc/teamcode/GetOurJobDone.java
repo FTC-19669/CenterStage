@@ -16,7 +16,6 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.ServoController;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
@@ -211,7 +210,7 @@ public class GetOurJobDone {
     public void initAfterStart() throws InterruptedException {
         timeSinceStart.reset();
 
-        if (autoMode == false) {
+        if (!autoMode) {
             threadWheel = new ThreadWheel();
             threadArm = new ThreadArm();
             tWheel = new Thread(threadWheel);
@@ -220,7 +219,7 @@ public class GetOurJobDone {
         }
     }
 
-    private ElapsedTime lastMainActionTime = new ElapsedTime();
+    private final ElapsedTime lastMainActionTime = new ElapsedTime();
     private String lastMainActionName = "";
 
     public void runAfterStart() throws InterruptedException {
@@ -249,13 +248,10 @@ public class GetOurJobDone {
             }
         }
 
-        if (autoMode == true)
+        if (autoMode)
             return;
 
-        boolean ignoreSame = false;
-        if (lastMainActionTime.milliseconds() < robotData.minTimeOfTwoOperations) {
-            ignoreSame = true;
-        }
+        boolean ignoreSame = lastMainActionTime.milliseconds() < robotData.minTimeOfTwoOperations;
         if (op.gamepad1.back) {
             if (ignoreSame && lastMainActionName.equals("back"))
                 return;
@@ -356,11 +352,10 @@ public class GetOurJobDone {
     }
      */
 
-        return;
     }
 
     public void stop() throws InterruptedException{
-        if (autoMode == false) {
+        if (!autoMode) {
             threadWheel.stop();
             threadArm.stop();
         }
@@ -372,7 +367,7 @@ public class GetOurJobDone {
     }
 
     private void logAction(String s) {
-        if (logMode == true) {
+        if (logMode) {
             logArray.add(s);
         } else {
             //return;
@@ -430,18 +425,15 @@ public class GetOurJobDone {
     }
 
 
-    private double frontLeftLastPower = 0;
-    private double frontRightLastPower = 0;
-    private double rearLeftLastPower = 0;
-    private double rearRightLastPower = 0;
-    private ElapsedTime lastWheelActionTime = new ElapsedTime();
+    private final double frontLeftLastPower = 0;
+    private final double frontRightLastPower = 0;
+    private final double rearLeftLastPower = 0;
+    private final double rearRightLastPower = 0;
+    private final ElapsedTime lastWheelActionTime = new ElapsedTime();
     private String lastWheelActionName = "";
 
     public void controlWheels() throws InterruptedException {
-        boolean ignoreSame = false;
-        if (lastWheelActionTime.milliseconds() < robotData.minTimeOfTwoOperations) {
-            ignoreSame = true;
-        }
+        boolean ignoreSame = lastWheelActionTime.milliseconds() < robotData.minTimeOfTwoOperations;
         if (op.gamepad1.a) {
             if (ignoreSame && lastWheelActionName.equals("a"))
                 return;
@@ -600,18 +592,14 @@ public class GetOurJobDone {
         }
         if (debugMode && op.gamepad1.left_stick_button && op.gamepad1.right_stick_button) {
             //resetServoPosition();
-            return;
         }
     }
 
-    private ElapsedTime lastArmActionTime = new ElapsedTime();
+    private final ElapsedTime lastArmActionTime = new ElapsedTime();
     private String lastArmActionName = "";
 
     private void controlArm() throws InterruptedException {
-        boolean ignoreSame = false;
-        if (lastArmActionTime.milliseconds() < robotData.minTimeOfTwoOperations) {
-            ignoreSame = true;
-        }
+        boolean ignoreSame = lastArmActionTime.milliseconds() < robotData.minTimeOfTwoOperations;
 
         if (op.gamepad2.x) {
             if (ignoreSame && lastArmActionName.equals("x"))
@@ -771,7 +759,6 @@ public class GetOurJobDone {
             if (ignoreSame && lastArmActionName.equals("left_stick"))
                 return;
             replayActionList(robotData.presetActionsPad2LeftStick);
-            ;
             lastArmActionName = "left_stick";
             lastArmActionTime.reset();
             return;
@@ -780,7 +767,6 @@ public class GetOurJobDone {
             if (ignoreSame && lastArmActionName.equals("right_stick"))
                 return;
             replayActionList(robotData.presetActionsPad2RightStick);
-            ;
             lastArmActionName = "right_stick";
             lastArmActionTime.reset();
             return;
@@ -789,7 +775,6 @@ public class GetOurJobDone {
             if (ignoreSame && lastArmActionName.equals("back"))
                 return;
             replayActionList(robotData.presetActionsPad2Back);
-            ;
             lastArmActionName = "back";
             lastArmActionTime.reset();
             return;
@@ -798,10 +783,8 @@ public class GetOurJobDone {
             if (ignoreSame && lastArmActionName.equals("start"))
                 return;
             replayActionList(robotData.presetActionsPad2Start);
-            ;
             lastArmActionName = "start";
             lastArmActionTime.reset();
-            return;
         }
 
     }
@@ -821,13 +804,13 @@ public class GetOurJobDone {
     private void setLogMode(boolean mode) {
         if (logMode == mode)
             return;
-        if (mode == true) {
+        if (mode) {
             logMode = true;
             logArray.clear();
             //System.out.println("Start log...");
             op.telemetry.addData("Start log...", logArray.size());
             op.telemetry.update();
-        } else if (mode == false) {
+        } else if (!mode) {
             op.telemetry.addData("Stop log...", logArray.size());
             logMode = false;
 
@@ -1060,12 +1043,10 @@ public class GetOurJobDone {
 
         if (splitStrings[1].equals("hangready")) {
             if (splitStrings[2].equals("on")) {
-                if (hangReady)
-                    return true;
+                return hangReady;
             }
             else if (splitStrings[2].equals("off")) {
-                if (!hangReady)
-                    return true;
+                return !hangReady;
             }
         }
         else if (splitStrings[1].equals("imu")) {
@@ -1075,11 +1056,7 @@ public class GetOurJobDone {
             // Calculate the error between the target and current yaw angles
             double error = targetYaw - currentYaw;
             // Check if the error is within the tolerance
-            if (Math.abs(error) < 10) {
-                return true;
-            }
-            else
-                return false;
+            return Math.abs(error) < 10;
         }
         return false;
     }
@@ -1215,13 +1192,11 @@ public class GetOurJobDone {
             deltaX = 0;
             deltaY = 0;
             recordXY = false;
-            return;
         } else if (splitStrings[1].equals("start")) {
             recordXY = true;
             deltaX = 0;
             deltaY = 0;
         }
-            return;
     }
 
     public void drone(String[] splitStrings) {
@@ -1417,7 +1392,6 @@ public class GetOurJobDone {
         power = Double.parseDouble(splitStrings[2]);
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor.setPower(power);
-        return;
     }
 
     public void transportation(String[] splitStrings) {
@@ -1877,7 +1851,7 @@ public class GetOurJobDone {
                 op.telemetry.update();
                 sleep(2000);
             }
-            if (replayAction(list[i]) == false) {
+            if (!replayAction(list[i])) {
                 return false;
             }
         }
@@ -2065,7 +2039,7 @@ public class GetOurJobDone {
         double rearLeftPower = 1;
         double rearRightPower = 1;
 
-        if (deltaY != 0 && recordXY == false) {
+        if (deltaY != 0 && !recordXY) {
             if (direction.equals("wheel_forward")) {
                 distanceInches -= deltaY; // had run deltaY, this time no need to run this far
                 deltaY = 0;
@@ -2082,7 +2056,7 @@ public class GetOurJobDone {
                 }
             }
         }
-        if (deltaX != 0 && recordXY == false) {
+        if (deltaX != 0 && !recordXY) {
             if (direction.equals("wheel_right")) {
                 distanceInches -= deltaX;
                 deltaX = 0;
@@ -2268,8 +2242,8 @@ public class GetOurJobDone {
         // Get the current yaw angle from the IMU sensor
         double currentYaw = useIMUKeepStraight ? _imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES) : 0;
         // Calculate the error between the target and current yaw angles
-        double error = (targetYaw - currentYaw) / robotData.yawErrorRatioBase;
-        double baseError = Math.abs(error) >= robotData.yawErrorBigValue ? Math.abs(error) : robotData.yawErrorBigValue;
+        double error = (targetYaw - currentYaw) / RobotDataBase.yawErrorRatioBase;
+        double baseError = Math.abs(error) >= RobotDataBase.yawErrorBigValue ? Math.abs(error) : RobotDataBase.yawErrorBigValue;
 
         if (!useTotalSteps) {
             while (wheelRunTime.milliseconds() < timeoutMilliSeconds) {
@@ -2338,7 +2312,7 @@ public class GetOurJobDone {
                         rightPower = frontRightPower * softStopPower;
                         leftPower2 = frontLeftPower * softStopPower;
                         rightPower2 = frontRightPower * softStopPower;
-                        if (Math.abs(error) >= robotData.yawExpectedDelta) {
+                        if (Math.abs(error) >= RobotDataBase.yawExpectedDelta) {
                             if (error > 0) {
                                 // left wheel less power
                                 leftPower2 = leftPower * (1.0 - Math.abs(error) / baseError);
@@ -2416,7 +2390,7 @@ public class GetOurJobDone {
                             rightPower = frontRightPower * speed;
                             leftPower2 = frontLeftPower * speed;
                             rightPower2 = frontRightPower * speed;
-                            if (Math.abs(error) >= robotData.yawExpectedDelta) {
+                            if (Math.abs(error) >= RobotDataBase.yawExpectedDelta) {
                                 if (direction.equals("wheel_forward")) {
                                     if (error > 0) {
                                         // left wheel less power
@@ -2514,11 +2488,12 @@ public class GetOurJobDone {
             while (i < splitStrings.length) {
                 if (splitStrings[i].equals(workingMode)) {
                     conditionMatch = true;
+                    break;
                 }
                 i = i + 1;
             }
         }
-        if (conditionMatch == false)
+        if (!conditionMatch)
             return;
         ElapsedTime wheelRunTime = new ElapsedTime();
         double power = 0.2;
@@ -2562,7 +2537,6 @@ public class GetOurJobDone {
             }
             catch (Exception e) {
                 System.out.println("Exception is caught");
-                return;
             }
         }
 
@@ -2582,7 +2556,6 @@ public class GetOurJobDone {
             }
             catch (Exception e) {
                 System.out.println("Exception is caught");
-                return;
             }
         }
 
@@ -2599,7 +2572,6 @@ public class GetOurJobDone {
             }
             catch (Exception e) {
                 System.out.println("Exception is caught");
-                return;
             }
         }
     }
@@ -2691,7 +2663,7 @@ public class GetOurJobDone {
                 exposureControl.setMode(ExposureControl.Mode.Manual);
                 sleep(50);
             }
-            exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
+            exposureControl.setExposure(exposureMS, TimeUnit.MILLISECONDS);
             sleep(20);
             GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
             gainControl.setGain(gain);
@@ -2705,7 +2677,7 @@ public class GetOurJobDone {
             return;
         }
 
-        ElapsedTime timeWaitAi = new ElapsedTime();;
+        ElapsedTime timeWaitAi = new ElapsedTime();
 
         // Make sure camera is streaming before we try to set the mode
         if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
@@ -2879,7 +2851,7 @@ public class GetOurJobDone {
     }
 
     boolean aiGetMarkPositionByApriltag(String[] splitStrings) throws InterruptedException {
-        if (useCamera == false) {
+        if (!useCamera) {
             return false;
         }
         double distanceToCenter = 0;
@@ -2889,7 +2861,7 @@ public class GetOurJobDone {
         boolean targetFound     = false;    // Set to true when an AprilTag target is detected
         AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
 
-        ElapsedTime timeWaitAi = new ElapsedTime();;
+        ElapsedTime timeWaitAi = new ElapsedTime();
 
         int type = -1;
         while (!targetFound && timeWaitAi.milliseconds() < 500) {
@@ -2991,7 +2963,7 @@ public class GetOurJobDone {
     }
 
     public boolean aiDoubleCheckMarkPosition(String[] splitStrings) throws InterruptedException {
-        if (useCamera == false) {
+        if (!useCamera) {
             return false;
         }
         if (markSeen || markPosition != 0) // had seen the mark, no need to take another check
@@ -3032,7 +3004,7 @@ public class GetOurJobDone {
     public void aiRunToTag(int tagId, double distanceToTarget) throws InterruptedException {
         AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
         boolean targetFound     = false;    // Set to true when an AprilTag target is detected
-        ElapsedTime timeWaitAi = new ElapsedTime();;
+        ElapsedTime timeWaitAi = new ElapsedTime();
 
         while (!targetFound && timeWaitAi.milliseconds() < 1500) {
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
@@ -3280,7 +3252,7 @@ public class GetOurJobDone {
     }   // end method telemetryTfod()
 
     boolean aiGetMarkPositionByTeamprop(String[] splitStrings) throws InterruptedException {
-        if (useCamera == false) {
+        if (!useCamera) {
             return false;
         }
         if (markSeen) {
@@ -3295,7 +3267,7 @@ public class GetOurJobDone {
         }
         boolean targetFound     = false;    // Set to true when an AprilTag target is detected
 
-        ElapsedTime timeWaitAi = new ElapsedTime();;
+        ElapsedTime timeWaitAi = new ElapsedTime();
 
         int type = -1;
         xMark = 0;
@@ -3461,7 +3433,6 @@ public class GetOurJobDone {
                 cameraStreaming = false;
             }
         }
-        return;
     }
 
     void waitElapsedTime(int waitTime) throws InterruptedException {
@@ -3475,7 +3446,7 @@ public class GetOurJobDone {
     }
 
     // turn robot with supporting of IMU
-    boolean imuTurn(String[] splitStrings) throws InterruptedException {
+    boolean imuTurn(String[] splitStrings) {
         // Define the desired yaw angle (in degrees)
         // imuturn @90 @0.2
         boolean result = false;
@@ -3499,7 +3470,7 @@ public class GetOurJobDone {
         double threasholdDegree = 3;
 
         ElapsedTime t = new ElapsedTime();
-        double error = 0;
+        double error;
 
         do {
             // Get the current yaw angle from the IMU sensor

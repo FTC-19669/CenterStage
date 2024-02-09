@@ -84,3 +84,4 @@ lint/tmp/
 .vscode
 .idea
 local.properties
+.gradle

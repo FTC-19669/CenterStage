@@ -24,8 +24,8 @@ public class RobotDataArm extends RobotDataBase {
         sliderSmallStepSize = 3 * sliderPerInch; // a litter bigger than 1 pixel height (3 inches)
         sliderDownStepSize = 2 * sliderPerInch; // less than the up value as the slider will go down by itself
         sliderRow0Position = sliderFirstRowPosition - (sliderRow0PositionLower ? 3 : 1) * sliderPerInch; // a little lower than one pixel height, no way to jump
-        sliderRow1Position = sliderFirstRowPosition + 1 * sliderPerInch;
-        sliderRow1FarPosition = sliderFirstRowPosition - 0 * sliderPerInch; //sliderFirstRowPosition - 1 * sliderPerInch;
+        sliderRow1Position = sliderFirstRowPosition + sliderPerInch;
+        sliderRow1FarPosition = sliderFirstRowPosition; //sliderFirstRowPosition - 1 * sliderPerInch;
         sliderRow2Position = sliderFirstRowPosition + 3 * sliderPerInch;
         sliderRow3Position = sliderFirstRowPosition + 6 * sliderPerInch;
         sliderRow4Position = sliderFirstRowPosition + 9 * sliderPerInch;
