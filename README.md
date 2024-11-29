@@ -1,1 +1,1 @@
-## This is the source code repository for FTC#19669 Systematic Chaos for the 2023-2024 CenterStage season.
+## Source code for our robot designed for the 2023-2024 FTC CenterStage season.
